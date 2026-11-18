@@ -1,0 +1,3 @@
+{% extends 'base.html' %}
+{% block title %}{{ code }} · MediBed{% endblock %}
+{% block content %}<main class="container-wide error-page"><span class="eyebrow">LET’S GET YOU BACK ON TRACK</span><h1>{{ code }}</h1><h2>{{ 'Page not found' if code == 404 else 'We couldn’t complete that action' }}</h2><p>{{ message }}</p><a href="/" class="btn btn-primary">Back to MediBed {{ icon('arrow') }}</a></main>{% endblock %}

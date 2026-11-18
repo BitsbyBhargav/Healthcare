@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Create account' if register else 'Welcome back' }} · MediBed{% endblock %}
+{% block page %}auth{% endblock %}
+{% block content %}
+<main class="container-wide auth-layout"><section class="auth-story"><span class="eyebrow">CARE, CONNECTED. IN PUNE.</span><h1>A little clarity.<br>A better<br><em>connection.</em></h1><p>Explore Pune hospitals, find ambulance contacts and follow your workspace requests in one calm, connected place.</p><div class="auth-points"><p>{{ icon('bed') }} Clear inventory and request tracking</p><p>{{ icon('bell') }} Updates in your personal workspace</p><p>{{ icon('shield') }} Only the account details you need</p></div><span class="small muted">MediBed / Independent hospital directory</span></section>
+<section class="auth-card panel"><span class="eyebrow">{{ 'PATIENT REGISTRATION' if register else 'YOUR MEDIBED WORKSPACE' }}</span><h2>{{ 'Start with a connection.' if register else 'Welcome back.' }}</h2><p class="muted">{{ 'Create a patient account with your name, email and password.' if register else 'Patients use their email; workspace administrators use their hospital username.' }}</p>
+<form id="auth-form" data-mode="{{ 'register' if register else 'login' }}">
+{% if register %}<label>Your name<input name="name" autocomplete="name" required minlength="2" maxlength="80" placeholder="Enter your name"></label><label>Email address<input type="email" name="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></label>
+{% else %}<label>Email or hospital username<input name="identifier" autocomplete="username" required maxlength="254" placeholder="Your email or hospital username"></label>{% endif %}
+<label>Password<input type="password" name="password" autocomplete="{{ 'new-password' if register else 'current-password' }}" required minlength="{{ 10 if register else 1 }}" maxlength="128" placeholder="{{ '10+ characters, letters and numbers' if register else 'Enter your password' }}"></label>
+{% if register %}<label class="checkbox-label privacy-ack"><input type="checkbox" name="accept_privacy" required> <span>I have read the <a href="/privacy" target="_blank" rel="noopener">privacy notice</a> and understand that workspace requests are not hospital confirmations.</span></label>{% endif %}
+<div class="form-error" role="alert" hidden></div><button class="btn btn-primary w-100" type="submit">{{ 'Create patient account' if register else 'Sign in' }} {{ icon('arrow') }}</button></form>
+<p class="auth-switch">{{ 'Already have an account?' if register else 'New to MediBed?' }} <a href="{{ '/login' if register else '/register' }}">{{ 'Sign in' if register else 'Create an account' }}</a></p>
+{% if not register %}<p class="small muted auth-help">Hospital workspace access is provisioned privately. No hospital affiliation is established by a project-managed login.</p>{% endif %}
+</section></main>
+{% endblock %}

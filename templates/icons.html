@@ -1,0 +1,19 @@
+{% macro icon(name, cls='') -%}
+<svg class="icon {{ cls }}" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+{% if name == 'phone' %}<path d="M7 3H4a1 1 0 0 0-1 1c0 9 8 17 17 17a1 1 0 0 0 1-1v-3l-5-2-2 2a15 15 0 0 1-7-7l2-2-2-5Z"/>
+{% elif name == 'arrow' %}<path d="M5 12h14m-5-5 5 5-5 5"/>
+{% elif name == 'bed' %}<path d="M3 18v-9m18 9v-6H3m0 4h18M6 12V7h12v5M8 10h2m4 0h2"/>
+{% elif name == 'hospital' %}<image href="{{ url_for('static', filename='vendor/hospital.svg') }}" width="24" height="24"/>
+{% elif name == 'pin' %}<path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 0 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/>
+{% elif name == 'clock' %}<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+{% elif name == 'search' %}<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/>
+{% elif name == 'bell' %}<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>
+{% elif name == 'chart' %}<path d="M4 4v16h16M8 16v-4m4 4V8m4 8v-6"/>
+{% elif name == 'grid' %}<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+{% elif name == 'users' %}<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3m2-14a3 3 0 0 1 0 6m2 3a5 5 0 0 1 2 5"/>
+{% elif name == 'logout' %}<path d="M9 4H4v16h5m5-12 4 4-4 4m-6-4h12"/>
+{% elif name == 'plus' %}<path d="M12 5v14M5 12h14"/>
+{% elif name == 'shield' %}<path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/>
+{% elif name == 'truck' %}<path d="M3 6h11v12H3Zm11 5h4l3 4v3h-7M6 9v5m-2-2h4"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/>
+{% endif %}</svg>
+{%- endmacro %}

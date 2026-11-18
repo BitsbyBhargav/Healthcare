@@ -1,0 +1,14 @@
+Source: Hospital Bed Capacity and ICU Load Dataset
+Creator: Endernel
+Kaggle page: https://www.kaggle.com/datasets/endernel/capacity-of-hospitals-bed
+Version: 2 (downloaded 2026-11-18)
+Kaggle-listed license: MIT
+
+The CSV files in this folder are the dataset's two original CSV tables. The
+dataset describes itself as synthetic. MediBed uses the updated table only
+to create scaled, fictional demo bed inventories and illustrative daily
+history. Assigned capacities, availability, equipment attributes and forecasts
+are not reported by or verified with any hospital.
+
+The seed transformation is documented in seed.py. MIT license text is in
+LICENSE-KAGGLE-HOSPITAL-BEDS.txt.

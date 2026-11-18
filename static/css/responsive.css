@@ -1,0 +1,9 @@
+/* Constrain mobile grid tracks and keep the account action on one line. */
+.workspace-short{display:none}
+@media(max-width:720px){
+  .workspace-label{display:none}
+  .workspace-short{display:inline}
+  .admin-shell{grid-template-columns:minmax(0,1fr)}
+  .admin-sidebar{min-width:0}
+  .nav-wrap{flex-wrap:nowrap}
+}

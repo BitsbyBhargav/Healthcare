@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Availability lab · MediBed{% endblock %}
+{% block page %}predictions{% endblock %}
+{% block scripts %}<script defer src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block content %}
+<main class="container-wide page-main"><div class="section-heading page-heading"><div><span class="eyebrow">MEDIBED AVAILABILITY LAB</span><h1>A glimpse of tomorrow.</h1><p>Explore a clearly labeled synthetic demo trend and its experimental next-day estimate.</p></div><span class="lab-stamp">EXPERIMENTAL<br><strong>FORECAST</strong></span></div>
+<div class="notice forecast-disclaimer">Demo inventory and history are synthetic, derived from a Kaggle sample dataset, and not reported by any hospital. Forecasts are not validated for medical decisions.</div>
+<form class="panel filter-inline" id="prediction-filter"><label>Pune hospital<select name="hospital_id">{% for h in hospitals %}<option value="{{ h.id }}">{{ h.name }} · {{ h.city }}</option>{% endfor %}</select></label><label>Bed category<select name="bed_type"><option value="general">General</option><option value="icu">ICU</option><option value="emergency">Emergency</option></select></label><button type="submit" class="btn btn-primary">Explore forecast {{ icon('arrow') }}</button></form>
+<div id="prediction-summary" class="forecast-stats"><p>Checking recorded history…</p></div>
+<section class="panel"><div class="section-heading"><div><h2>Synthetic demo history</h2><p class="small muted">Illustrative values derived from the Kaggle sample dataset</p></div><span class="badge-soft" id="model-method">Loading…</span></div><div class="chart-box forecast-chart"><canvas id="history-chart" aria-label="Synthetic demo history and forecast" role="img"></canvas><div id="history-fallback"></div></div></section>
+<div class="two-columns"><section class="panel"><span class="eyebrow">UNDER THE HOOD</span><h2>Small model. Clear boundaries.</h2><p id="model-explanation">RandomForestRegressor uses earlier availability, recent changes, and weekday. Future observations are never used as inputs.</p><div id="model-validation" class="notice"></div></section><section class="panel"><span class="eyebrow">READING THIS FORECAST</span><h2>An experiment, not a promise.</h2><p>Any forecast is bounded by the demo category capacity. Kaggle source figures are synthetic sample data; hospital capacity and current availability are not verified.</p><p>A moving-average fallback keeps the module available if training fails. Missing, stale or insufficient history displays an unavailable state. No prediction reserves a bed or informs clinical decisions.</p><a href="/hospitals">Explore Pune hospitals →</a></section></div>
+</main>
+{% endblock %}

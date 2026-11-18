@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Find an ambulance · MediBed Pune{% endblock %}
+{% block page %}ambulances{% endblock %}
+{% block scripts %}<script defer src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block content %}
+<main class="container-wide page-main">
+<div class="section-heading page-heading"><div><span class="eyebrow">PUNE AMBULANCE CONTACTS</span><h1>A direct line to help.</h1><p>Find a hospital ambulance desk and call directly from your phone.</p></div><span class="hospital-monogram">{{ icon('truck') }}</span></div>
+<div class="emergency-banner"><div>{{ icon('shield') }}<strong>For an emergency, call 112.</strong><span>Vehicle availability, charges and arrival time must be confirmed by the dispatcher.</span></div><a class="btn btn-primary" href="tel:112">Call 112 ↗</a></div>
+<form class="panel filter-inline" id="ambulance-filter">
+<label>Hospital<select name="hospital_id"><option value="">All hospitals</option>{% for h in hospitals %}<option value="{{ h.id }}">{{ h.name }}</option>{% endfor %}</select></label>
+<label>Area<select name="area"><option value="">All Pune areas</option>{% for area in hospitals|map(attribute='area')|unique|sort %}<option>{{ area }}</option>{% endfor %}</select></label>
+<label>Reported status<select name="status"><option value="">All contacts</option><option value="available">Reported available</option><option value="busy">Reported busy</option><option value="unknown">Call to confirm</option></select></label>
+<button class="btn btn-primary" type="submit">Find contacts {{ icon('search') }}</button>
+</form>
+<p class="inline-note">Numbers are published by the hospitals on the linked official pages; last checked 18 November 2026. MediBed is an independent directory. There is no live fleet connection or vehicle tracking. Workspace reports are unverified and expire after 30 minutes.</p>
+<div class="hospital-grid" id="ambulance-results" aria-live="polite"><div class="empty-state">Loading ambulance contacts…</div></div>
+<section class="panel call-help"><h2>Call from any device.</h2><p>On a mobile phone, tap <strong>Call ambulance desk</strong> to open your dialer. On a computer, use the displayed number or a configured calling app. Your device asks you to place the call; MediBed never calls automatically.</p><p class="small muted">A phone conversation with the dispatcher is required to arrange transport. Clicking Call does not reserve a vehicle, track a journey, or send your location.</p></section>
+</main>
+{% endblock %}

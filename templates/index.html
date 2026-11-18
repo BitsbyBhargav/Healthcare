@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block page %}search{% endblock %}
+{% block scripts %}<script defer src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block content %}
+<main>
+  <section class="hero container-wide">
+    <div class="hero-copy"><div class="eyebrow"><span class="teal-dot"></span> HOSPITAL AVAILABILITY, SIMPLIFIED</div><h1>Find a bed.<br>Find a little <em>clarity.</em></h1><p>Explore Pune hospitals, find published ambulance contacts, and follow your requests in one place. A clearer way to coordinate your next step.</p><div class="hero-notes"><span>{{ icon('clock') }} Refreshed every 5 seconds</span><span>{{ icon('shield') }} Pune hospital directory</span></div></div>
+    <div class="hero-visual" aria-label="Illustration of a hospital availability dashboard">
+      <div class="visual-grid"></div><div class="visual-orbit"></div><div class="visual-cross">+</div>
+      <div class="visual-topline"><span class="teal-dot"></span> A CONNECTED VIEW OF CARE <span>↗</span></div>
+      <div class="building"><div class="building-sign">M<span>+</span></div><div class="building-windows">{% for i in range(12) %}<i></i>{% endfor %}</div><div class="building-door"></div><span class="building-caption">HOSPITAL COORDINATION</span></div>
+      <div class="visual-float float-beds"><span class="icon-tile">{{ icon('bed') }}</span><div><strong>Every bed counts.</strong><small>One physical bed. One clear status.</small></div></div>
+      <div class="visual-float float-status"><span class="teal-dot"></span> Availability, in one place <span class="tiny-bars"><i></i><i></i><i></i><i></i></span></div>
+      <div class="visual-bottom">DESIGNED FOR COORDINATION <span>01 — 06</span></div>
+    </div>
+  </section>
+  <section class="container-wide search-section" aria-labelledby="search-heading">
+    <div class="search-panel"><div class="section-heading compact"><h2 id="search-heading">Let’s find the right match.</h2><span>Explore hospitals across Pune</span></div>
+      <form id="hospital-search">
+        <div class="search-fields"><label>City<div class="input-icon">{{ icon('pin') }}<select name="city" aria-label="City"><option value="Pune">Pune</option></select></div></label>
+        <label>Hospital category<select name="hospital_type"><option value="">All categories</option><option value="government">Government</option><option value="private">Private</option></select></label>
+        <label>Bed type<select name="bed_type"><option value="">Any bed type</option><option value="general">General</option><option value="icu">ICU</option><option value="emergency">Emergency</option></select></label>
+        <label>Request priority<select name="priority"><option value="normal">Normal request</option><option value="emergency">Emergency (sorting aid)</option></select></label>
+        <button class="btn btn-primary search-button" type="submit">{{ icon('search') }} Find hospitals</button></div>
+        <div class="search-bottom"><div class="check-row"><label><input type="checkbox" name="oxygen_required" value="true"> Oxygen required</label><label><input type="checkbox" name="ventilator_required" value="true"> Ventilator required</label><label><input type="checkbox" name="available_only" value="true"> Available beds only</label></div><button class="text-button" type="reset">Reset filters</button></div>
+      </form>
+    </div>
+    <div class="kpi-grid public-kpis"><div class="stat-card"><span class="stat-icon">{{ icon('hospital') }}</span><div><strong data-stat="hospital_count">6</strong><span>Pune hospitals</span></div></div><div class="stat-card"><span class="stat-icon mint">{{ icon('bed') }}</span><div><strong data-stat="available">—</strong><span>Hospital-reported beds</span></div><span class="stat-detail">— means feed not connected</span></div><div class="stat-card"><span class="stat-icon blue">{{ icon('plus') }}</span><div><strong data-stat="icu">—</strong><span>Hospital-reported ICU</span></div></div><div class="stat-card"><span class="stat-icon violet">{{ icon('pin') }}</span><div><strong data-stat="ambulance_contacts">5</strong><span>Ambulance contacts</span></div><span class="stat-detail">Published hospital dispatch desks</span></div></div>
+  </section>
+  <section class="container-wide hospital-section" id="results"><div class="section-heading"><div><div class="eyebrow">YOUR OPTIONS, AT A GLANCE</div><h2>Pune hospitals, at a glance.</h2><p><span id="result-count">6</span> Pune hospitals <span class="dot-divider">·</span> Official contact sources linked</p></div><span class="sync-indicator" id="sync-status"><span class="teal-dot"></span> Refreshing every 5s</span></div>
+  <p class="inline-note">Hospital bed feeds are not connected. Some displayed availability is synthetic demo data derived from a Kaggle sample, not hospital-reported or verified. Call the hospital to confirm.</p>
+  <div class="hospital-grid" id="hospital-results" aria-live="polite"><div class="empty-state">Loading hospital availability…</div></div>
+  </section>
+  <section class="container-wide how-section"><div><p class="eyebrow">A CLEARER PATH</p><h2>Less searching.<br>More understanding.</h2><p>Explore the complete coordination journey<br>with clear information at every step.</p></div><article><span>01</span><h3>Explore availability</h3><p>Find a hospital that matches your city, bed category and equipment needs.</p></article><article><span>02</span><h3>Send a request</h3><p>Sign in to track an internal workspace request or waiting-list entry.</p></article><article><span>03</span><h3>Stay in the loop</h3><p>Follow workspace decisions and notifications. Contact the hospital for actual admission.</p></article></section>
+</main>
+{% endblock %}

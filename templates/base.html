@@ -1,0 +1,42 @@
+{% from 'icons.html' import icon %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <meta name="user-role" content="{{ current_user.role if current_user else '' }}">
+  <meta name="description" content="MediBed: an independent Pune hospital directory, ambulance contacts and request workspace.">
+  <title>{% block title %}MediBed · A clearer view of care{% endblock %}</title>
+  <link rel="icon" href="{{ url_for('static', filename='img/mark.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/pilot.css') }}">
+  <script defer src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}" data-page="{% block page %}{% endblock %}">
+  <div class="demo-strip"><div class="container-wide"><span><span class="demo-dot"></span> Independent Pune directory · Confirm availability with the hospital</span><span class="demo-emergency">Emergency? <a href="tel:112">Call 112 ↗</a></span></div></div>
+  <header class="site-header"><div class="container-wide nav-wrap">
+    <a class="brand" href="/" aria-label="MediBed home"><img src="{{ url_for('static', filename='img/mark.svg') }}" alt="" width="34" height="34">Medi<span>Bed</span><small>CARE, CONNECTED.</small></a>
+    <button class="icon-button mobile-nav" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    <nav id="main-nav" aria-label="Main navigation">
+      <a href="/hospitals" class="{{ 'active' if request.path in ['/', '/hospitals'] else '' }}">Find a hospital</a>
+      <a href="/ambulances" class="{{ 'active' if request.path == '/ambulances' else '' }}">Find an ambulance</a>
+      <a href="/predictions" class="{{ 'active' if request.path == '/predictions' else '' }}">Forecasts <span class="mini-label">LAB</span></a>
+    </nav>
+    <div class="nav-actions">
+      {% if current_user %}
+      <a href="{{ '/admin#notifications' if current_user.role == 'hospital_admin' else '/patient#notifications' }}" class="notification-link" aria-label="View notifications">{{ icon('bell') }}<span id="notification-count" class="notification-count" hidden>0</span></a>
+      <a class="btn btn-primary btn-sm" href="{{ '/admin' if current_user.role == 'hospital_admin' else '/patient' }}"><span class="workspace-label">{{ 'Hospital workspace' if current_user.role == 'hospital_admin' else 'My requests' }}</span><span class="workspace-short">{{ 'Workspace' if current_user.role == 'hospital_admin' else 'Requests' }}</span> {{ icon('arrow') }}</a>
+      <button class="icon-button" id="logout" title="Sign out" aria-label="Sign out">{{ icon('logout') }}</button>
+      {% else %}<a href="/login" class="sign-in">Sign in</a><a class="btn btn-primary btn-sm" href="/register">Get started {{ icon('arrow') }}</a>{% endif %}
+    </div>
+  </div></header>
+  {% block content %}{% endblock %}
+  <footer class="site-footer"><div class="container-wide"><div><a class="footer-brand" href="/">MediBed<span> / </span></a>A clearer view of care.</div><p>Independent directory. Hospital feeds are not connected.</p><span><a href="/privacy">Privacy</a> · For emergencies, <a href="tel:112">call 112</a>.</span></div></footer>
+  <a class="mobile-ambulance-cta" href="/ambulances">Find an ambulance ↗</a>
+  <div id="toast-region" class="toast-region" role="status" aria-live="polite"></div>
+  <dialog id="confirm-dialog" class="app-dialog small-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message"><div class="dialog-content"><p class="eyebrow">PLEASE CONFIRM</p><h2 id="confirm-title">Continue?</h2><p id="confirm-message"></p><div class="button-row"><button class="btn btn-outline-secondary" data-close>Keep it</button><button class="btn btn-primary" id="confirm-yes">Confirm</button></div></div></dialog>
+</body></html>

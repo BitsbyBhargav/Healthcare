@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}My requests · MediBed{% endblock %}
+{% block page %}patient{% endblock %}
+{% block scripts %}<script defer src="{{ url_for('static', filename='js/dashboard.js') }}"></script>{% endblock %}
+{% block content %}
+<main class="container-wide page-main"><div class="section-heading page-heading"><div><span class="eyebrow">YOUR PERSONAL WORKSPACE</span><h1>Hello, {{ current_user.name.split()[0] }}.</h1><p>Every request. Every update. All in one place.</p></div><a class="btn btn-primary" href="/hospitals">Find a hospital {{ icon('arrow') }}</a></div>
+<div class="kpi-grid patient-kpis"><div class="stat-card"><div><span>Total requests</span><strong id="patient-total">—</strong></div>{{ icon('users') }}</div><div class="stat-card"><div><span>Awaiting review</span><strong id="patient-pending">—</strong></div>{{ icon('clock') }}</div><div class="stat-card"><div><span>Workspace reservations</span><strong id="patient-approved">—</strong></div>{{ icon('bed') }}</div></div>
+<div class="patient-layout"><section class="panel"><div class="section-heading"><div><h2>My admission requests</h2><p class="small muted">Approved means a MediBed workspace reservation. It is not hospital confirmation.</p></div><span class="sync-indicator" id="sync-status"><span class="teal-dot"></span> 5-second refresh</span></div><div id="patient-requests" aria-live="polite"><p>Loading your requests…</p></div></section><aside><section class="panel" id="notifications"><div class="section-heading"><h2>Notifications</h2>{{ icon('bell') }}</div><div id="notification-list"><p>Loading updates…</p></div></section><div class="notice">Priority is a sorting aid, not clinical triage. For emergencies, <a href="tel:112">call 112</a>.</div></aside></div></main>
+{% endblock %}
