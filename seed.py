@@ -117,7 +117,7 @@ def seed_synthetic_inventory():
                 ))
 
 
-def seed_data():
+def seed_data(create_admin_accounts=True):
     credentials = []
     for spec in HOSPITALS:
         hospital = db.session.scalar(db.select(Hospital).where(Hospital.slug == spec['slug']))
@@ -127,7 +127,7 @@ def seed_data():
             db.session.add(hospital)
             db.session.flush()
         username = spec['slug']
-        if not db.session.scalar(db.select(User.id).where(User.username == username)):
+        if create_admin_accounts and not db.session.scalar(db.select(User.id).where(User.username == username)):
             password = current_app.config.get('SEED_ADMIN_PASSWORD') if current_app.testing else None
             password = password or secrets.token_urlsafe(20)
             admin = User(name=f'{spec["name"][:55]} workspace admin', email=f'{username}@workspaces.medibed.invalid',

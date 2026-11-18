@@ -82,6 +82,9 @@ def create_app(test_config=None):
         if app.config['AUTO_SEED']:
             from seed import seed_data
             seed_data()
+        elif app.config['PUBLIC_DIRECTORY_SEED']:
+            from seed import seed_data
+            seed_data(create_admin_accounts=False)
     return app
 
 

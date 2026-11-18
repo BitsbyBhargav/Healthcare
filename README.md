@@ -67,7 +67,7 @@ The included `render.yaml` configures a free web service with a free PostgreSQL 
    ```
 
    Passwords are hashed in the local database and are not printed. This does not change patient registrations.
-3. In Render, create a **Blueprint** from the private GitHub repository. The blueprint creates the web service and PostgreSQL database with `AUTO_SEED=false`, so it will not create replacement accounts or demo data.
+3. In Render, create a **Blueprint** from the private GitHub repository. The blueprint sets `AUTO_SEED=false` and `PUBLIC_DIRECTORY_SEED=true`: the public hospital directory and labeled synthetic demo inventory are initialized, but no replacement hospital-admin accounts are created. Existing accounts and registrations must be migrated separately.
 4. Copy the Render database's **external** connection URL into a PowerShell secure prompt and migrate the current local database. Determine the local SQLite path before setting `DATABASE_URL`:
 
    ```powershell

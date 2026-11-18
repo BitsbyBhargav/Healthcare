@@ -42,6 +42,9 @@ def configuration():
     auto_seed = os.getenv('AUTO_SEED', 'true').strip().lower()
     if auto_seed not in ('1', 'true', 'yes', 'on', '0', 'false', 'no', 'off'):
         raise RuntimeError('AUTO_SEED must be set to true or false.')
+    public_directory_seed = os.getenv('PUBLIC_DIRECTORY_SEED', 'false').strip().lower()
+    if public_directory_seed not in ('1', 'true', 'yes', 'on', '0', 'false', 'no', 'off'):
+        raise RuntimeError('PUBLIC_DIRECTORY_SEED must be set to true or false.')
     return {
         'SECRET_KEY': secret,
         'PRODUCTION': production,
@@ -58,6 +61,7 @@ def configuration():
         'PERMANENT_SESSION_LIFETIME': timedelta(hours=2),
         'MAX_CONTENT_LENGTH': 32 * 1024,
         'AUTO_SEED': auto_seed in ('1', 'true', 'yes', 'on'),
+        'PUBLIC_DIRECTORY_SEED': public_directory_seed in ('1', 'true', 'yes', 'on'),
         'RATE_LIMIT_ENABLED': True,
         'LOGIN_RATE_LIMIT': 20,
         'REGISTER_RATE_LIMIT': 5,

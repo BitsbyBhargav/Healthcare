@@ -1,5 +1,6 @@
 from models import db, Bed, Hospital, AdmissionRequest, User, Ambulance, BedHistory, Notification
 from seed import seed_data
+from app import create_app
 
 
 def test_search_filters_and_physical_counts(app):
@@ -82,3 +83,17 @@ def test_kaggle_demo_inventory_and_history_are_labeled(app):
         assert len(history) == 3 * 45
         assert {row.source for row in history} == {'synthetic_kaggle'}
         assert all(0 <= row.available_beds <= row.total_beds for row in history)
+
+
+def test_public_directory_seed_does_not_create_admin_accounts(tmp_path):
+    application = create_app({
+        'TESTING': True,
+        'SECRET_KEY': 'test-only-key',
+        'SQLALCHEMY_DATABASE_URI': 'sqlite:///' + (tmp_path / 'public-directory.db').as_posix(),
+        'AUTO_SEED': False,
+        'PUBLIC_DIRECTORY_SEED': True,
+    })
+    with application.app_context():
+        assert db.session.scalar(db.select(db.func.count(Hospital.id))) == 6
+        assert db.session.scalar(db.select(db.func.count(User.id))) == 0
+        assert db.session.scalar(db.select(db.func.count(Bed.id))) > 0
