@@ -1,0 +1,13 @@
+flowchart TB
+  patients[Patients] --> browser[Browser: Jinja HTML / Bootstrap / vanilla JS / Chart.js]
+  admins[Hospital workspace administrators] --> browser
+  browser -->|HTTPS pages + JSON polling| edge[Render HTTPS edge]
+  edge --> gunicorn[Gunicorn WSGI: 1 worker / 4 threads]
+  gunicorn --> security[Flask application factory + security hooks]
+  security --> routes[Public / Auth / Patient / Admin / Forecast blueprints]
+  routes --> services[Booking / Inventory / Notifications / Security / Forecast services]
+  services --> orm[Flask-SQLAlchemy]
+  orm --> postgres[(Render managed PostgreSQL)]
+  directory[Checked-in Pune directory + labeled evaluation data] -->|Idempotent seeding| postgres
+  browser -->|User taps tel:| phone[Device dialer / calling app]
+  local[Local development] -.-> sqlite[(Local SQLite)]

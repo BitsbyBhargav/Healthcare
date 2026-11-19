@@ -5,3 +5,13 @@ instance/
 .env
 *.pyc
 artifacts/
+
+*credentials*.txt
+
+*credentials*.json
+
+*.db
+
+*.sqlite*
+
+backups/
