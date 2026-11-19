@@ -3,6 +3,7 @@ import sys
 sys.dont_write_bytecode = True
 
 import csv
+import json
 import math
 import os
 import secrets
@@ -118,6 +119,24 @@ def seed_synthetic_inventory():
 
 
 def seed_data(create_admin_accounts=True):
+    # A public-directory deployment can explicitly provision its missing
+    # workspace accounts without enabling unrestricted startup seeding.
+    # Passwords are supplied privately by the host, never committed to Git.
+    raw_bootstrap = os.getenv('HOSPITAL_ADMIN_BOOTSTRAP_JSON')
+    bootstrap = {}
+    if raw_bootstrap:
+        try:
+            bootstrap = json.loads(raw_bootstrap)
+        except (TypeError, ValueError):
+            raise RuntimeError('Hospital admin bootstrap must be valid JSON.') from None
+        expected = {spec['slug'] for spec in HOSPITALS}
+        if not isinstance(bootstrap, dict) or set(bootstrap) != expected:
+            raise RuntimeError('Hospital admin bootstrap must contain exactly the six hospital usernames.')
+        if any(not isinstance(value, str) or not 10 <= len(value) <= 128
+               or not any(c.isalpha() for c in value) or not any(c.isdigit() for c in value)
+               for value in bootstrap.values()):
+            raise RuntimeError('Each hospital bootstrap password must have 10-128 characters, letters and numbers.')
+        create_admin_accounts = True
     credentials = []
     for spec in HOSPITALS:
         hospital = db.session.scalar(db.select(Hospital).where(Hospital.slug == spec['slug']))
@@ -128,7 +147,8 @@ def seed_data(create_admin_accounts=True):
             db.session.flush()
         username = spec['slug']
         if create_admin_accounts and not db.session.scalar(db.select(User.id).where(User.username == username)):
-            password = current_app.config.get('SEED_ADMIN_PASSWORD') if current_app.testing else None
+            password = bootstrap.get(username)
+            password = password or (current_app.config.get('SEED_ADMIN_PASSWORD') if current_app.testing else None)
             password = password or secrets.token_urlsafe(20)
             admin = User(name=f'{spec["name"][:55]} workspace admin', email=f'{username}@workspaces.medibed.invalid',
                          username=username, role='hospital_admin', hospital_id=hospital.id, password_hash=generate_password_hash(password))
