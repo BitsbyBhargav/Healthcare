@@ -10,7 +10,7 @@ import secrets
 from datetime import timedelta
 from pathlib import Path
 from flask import current_app
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Hospital, Bed, BedHistory, Ambulance, Notification, now
 from data.pune_hospitals import HOSPITALS, CHECKED_AT
 
@@ -146,7 +146,16 @@ def seed_data(create_admin_accounts=True):
             db.session.add(hospital)
             db.session.flush()
         username = spec['slug']
-        if create_admin_accounts and not db.session.scalar(db.select(User.id).where(User.username == username)):
+        existing_admin = db.session.scalar(db.select(User).where(User.username == username))
+        if username in bootstrap and existing_admin:
+            if existing_admin.role != 'hospital_admin' or existing_admin.hospital_id != hospital.id:
+                raise RuntimeError('Hospital bootstrap username is assigned to a different account.')
+            # An explicit private mapping is authoritative. Compare first so
+            # unchanged configuration does not rehash passwords on every boot.
+            if not check_password_hash(existing_admin.password_hash, bootstrap[username]):
+                existing_admin.password_hash = generate_password_hash(bootstrap[username])
+                credentials.append((username, bootstrap[username], hospital.name))
+        if create_admin_accounts and not existing_admin:
             password = bootstrap.get(username)
             password = password or (current_app.config.get('SEED_ADMIN_PASSWORD') if current_app.testing else None)
             password = password or secrets.token_urlsafe(20)
